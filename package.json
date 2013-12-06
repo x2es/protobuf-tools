@@ -1,0 +1,17 @@
+{
+  "name": "protobuf-tools",
+  "description": "Wrapper and set of helpers for simplify usage of dcodeIO/ProtoBuf.js",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "requirejs": "latest",
+    "protobufjs": "1.5.1",
+    "lodash": "latest"
+  },
+  "devDependencies": {
+    "mocha": "latest",
+    "chai": "latest",
+    "karma-mocha": "latest",
+    "karma-html-reporter": "latest"
+  }
+}

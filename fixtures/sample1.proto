@@ -1,0 +1,112 @@
+
+message SampleOne {
+    optional int32 int32 = 1;
+    optional uint32 uint32 = 2;
+    optional int64 int64 = 3;
+    optional uint64 uint64 = 4;
+    optional double double = 5;
+    optional string string = 6;
+    optional bool bool = 7;
+}
+
+message SampleTwo {
+    optional int32 fldname = 1;
+}
+
+message SharedFieldOne {
+    optional int32 sharedField = 1;
+    optional string otherField = 2;
+}
+
+message SharedFieldTwo {
+    optional int32 sharedField = 1;
+    optional string anotherField = 2;
+}
+
+
+enum SampleEnum {
+    VAL_ONE = 1;
+    VAL_TWO = 2;
+    VAL_THREE = 3;
+    VAL_FOUR = 4;
+}
+
+
+message RepeatedFieldsTest {
+    repeated int32 repeatedInt = 1;
+    repeated SampleTwo repeatedMessage = 2;
+}
+
+message SimpleEmbedTest {
+    optional SampleTwo embed = 1;
+}
+
+message SimpleInnerMessage {
+    optional int32 int32 = 1;
+    optional uint32 uint32 = 2;
+    optional int64 int64 = 3;
+    optional uint64 uint64 = 4;
+    optional double double = 5;
+    optional string string = 6;
+    optional bool bool = 7;
+
+    optional SampleEnum enum = 8;
+    repeated SampleEnum repeatedEnum = 9;
+    repeated int32 repeatedInt = 10;
+    //optional float flt = 11;
+}
+
+message MessageWithIntegers32 {
+    optional int32 int32 = 1;
+    optional uint32 uint32 = 2;
+}
+
+message MessageWithIntegers64 {
+    optional int64 int64 = 1;
+    optional uint64 uint64 = 2;
+}
+
+message MessageWithFloats {
+    optional float float = 1;
+    optional double double = 2;
+}
+
+message InnerWithEmbMessage {
+    optional int32 int32 = 1;
+    optional uint32 uint32 = 2;
+
+    optional SampleEnum enum = 3;
+    optional SimpleInnerMessage embedded = 4;
+
+    repeated SimpleInnerMessage repeatedEmbedded = 5;
+    repeated SampleEnum repeatedEnum = 6;
+}
+
+message CopyTesterMessage {
+    optional int32 int32 = 1;
+    optional string string = 2;
+
+    optional SampleEnum enum = 3;
+    optional InnerWithEmbMessage deepEmbedded = 4;
+
+    repeated string repeatedString = 5;
+    repeated InnerWithEmbMessage repeatedDeepEmbedded = 6;
+}
+
+/* Testing issue with float/double encode() -> decode() */
+
+message FloatMessage {
+    optional float fldFloat = 1;
+}
+
+message DoubleMessage {
+    optional double fldDouble = 1;
+}
+
+message NestedFloatMessage {
+    optional FloatMessage fldFloatMsg = 1;
+}
+
+message NestedDoubleMessage {
+    optional DoubleMessage fldDoubleMsg = 1;
+}
