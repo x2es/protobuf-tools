@@ -17,8 +17,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode int32', function() {
-      var MsgMeta = proto.getMessageMeta('MessageWithIntegers32');
-      var MsgConstructor = MsgMeta.build();
+      var MsgConstructor = proto.getMessageMeta('MessageWithIntegers32').build();
       var msg = new MsgConstructor();
 
       msg.setInt32(34);
@@ -29,8 +28,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode int64', function() {
-      var MsgMeta = proto.getMessageMeta('MessageWithIntegers64');
-      var MsgConstructor = MsgMeta.build();
+      var MsgConstructor = proto.getMessageMeta('MessageWithIntegers64').build();
       var msg = new MsgConstructor();
 
       msg.setInt64(34);
@@ -44,8 +42,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     //                        seems method Message.prototype.encode should to use (new ByteBuffer().LE())
     //     SOLVED: .decode() should be called on Constructor instead of Meta
     it('should reencode floats (eq through wrapper.equal())', function() {
-      var MsgMeta = proto.getMessageMeta('MessageWithFloats');
-      var MsgConstructor = MsgMeta.build();
+      var MsgConstructor = proto.getMessageMeta('MessageWithFloats').build();
       var msg = new MsgConstructor();
 
       msg.setFloat(parseFloat(12.52));
@@ -56,8 +53,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode float', function() {
-      var MsgMeta = proto.getMessageMeta('FloatMessage');
-      var MsgConstructor = MsgMeta.build();
+      var MsgConstructor = proto.getMessageMeta('FloatMessage').build();
       var msg = new MsgConstructor();
 
       msg.setFldFloat(1.52);
@@ -71,8 +67,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode double', function() {
-      var MsgMeta = proto.getMessageMeta('DoubleMessage');
-      var MsgConstructor = MsgMeta.build();
+      var MsgConstructor = proto.getMessageMeta('DoubleMessage').build();
       var msg = new MsgConstructor();
 
       msg.setFldDouble(1.52);
@@ -82,12 +77,9 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode nested float', function() {
-      var MsgMainMeta = proto.getMessageMeta('NestedFloatMessage'),
-          MsgEmbedMeta = proto.getMessageMeta('FloatMessage'),
+      var MsgMainConstr = proto.getMessageMeta('NestedFloatMessage').build(),
+          MsgEmbedConstr = proto.getMessageMeta('FloatMessage').build(),
           
-          MsgMainConstr = MsgMainMeta.build(),
-          MsgEmbedConstr = MsgEmbedMeta.build(),
-
           msgMain = new MsgMainConstr(),
           msgEmbed = new MsgEmbedConstr();
 
@@ -103,12 +95,9 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode nested double', function() {
-      var MsgMainMeta = proto.getMessageMeta('NestedDoubleMessage'),
-          MsgEmbedMeta = proto.getMessageMeta('DoubleMessage'),
+      var MsgMainConstr = proto.getMessageMeta('NestedDoubleMessage').build(),
+          MsgEmbedConstr = proto.getMessageMeta('DoubleMessage').build(),
           
-          MsgMainConstr = MsgMainMeta.build(),
-          MsgEmbedConstr = MsgEmbedMeta.build(),
-
           msgMain = new MsgMainConstr(),
           msgEmbed = new MsgEmbedConstr();
 
