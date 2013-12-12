@@ -35,6 +35,7 @@ define(['ProtoBuf'], function(ProtoBuf) {
           // ISSUE:x2es [131206-1]: comparing should be performed with specified precision
           //                        maximum precision for float and "1.52" example is 7 digits after dot
           //                        for "43.2" example is 5 digits after dot
+          console.warn('protobuf-wrapper: float comparing performing with fixed precision = 5!');
           var prec = 5;
           return ((a.toFixed(prec) - b.toFixed(prec)) === 0);
         },

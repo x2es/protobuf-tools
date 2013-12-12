@@ -40,8 +40,9 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
       expect(msg.equal(msg2)).to.equal(true);
     });
 
-    // ISSUE:x2es [131205-1]: ProtoBuf.js has reintroduced error on encoding float/double values
+    // NOTE:x2es [issue#131205-1]: ProtoBuf.js has reintroduced error on encoding float/double values
     //                        seems method Message.prototype.encode should to use (new ByteBuffer().LE())
+    //     SOLVED: .decode() should be called on Constructor instead of Meta
     it('should reencode floats (eq through wrapper.equal())', function() {
       var MsgMeta = proto.getMessage('MessageWithFloats');
       var MsgConstructor = MsgMeta.build();
@@ -50,7 +51,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
       msg.setFloat(parseFloat(12.52));
       msg.setDouble(parseFloat(143.21435));
 
-      var msg2 = MsgMeta.decode(msg.encode());
+      var msg2 = MsgConstructor.decode(msg.encode());
       expect(msg.equal(msg2)).to.equal(true);
     });
 
@@ -61,7 +62,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
 
       msg.setFldFloat(1.52);
 
-      var msg2 = MsgMeta.decode(msg.encode());
+      var msg2 = MsgConstructor.decode(msg.encode());
 
       // ISSUE:x2es [131206-1]: comparing should be performed with specified precision
       //                        maximum precision for float and "1.52" example is 7 digits after dot
@@ -76,7 +77,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
 
       msg.setFldDouble(1.52);
 
-      var msg2 = MsgMeta.decode(msg.encode());
+      var msg2 = MsgConstructor.decode(msg.encode());
       expect(msg.fldDouble).to.equal(msg2.fldDouble);
     });
 
@@ -93,7 +94,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
       msgEmbed.setFldFloat(1.52);
       msgMain.setFldFloatMsg(msgEmbed);
 
-      var msg2 = MsgMainMeta.decode(msgMain.encode());
+      var msg2 = MsgMainConstr.decode(msgMain.encode());
 
       // ISSUE:x2es [131206-1]: comparing should be performed with specified precision
       //                        maximum precision for float and "1.52" example is 7 digits after dot
@@ -114,7 +115,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
       msgEmbed.setFldDouble(1.52);
       msgMain.setFldDoubleMsg(msgEmbed);
 
-      var msg2 = MsgMainMeta.decode(msgMain.encode());
+      var msg2 = MsgMainConstr.decode(msgMain.encode());
 
       expect(msgMain.fldDoubleMsg.fldDouble - msg2.fldDoubleMsg.fldDouble).to.equal(0);
 
@@ -275,10 +276,11 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
               beforeEach(function() {
                 // it's complex message with 2-level nested sub-messages and several repeated fields
                 var testerMeta = proto.getMessage('CopyTesterMessage');
+                var TesterConstructor = testerMeta.build();
 
                 // WARN:x2es: fixturesFactory has no test-coverage
                 msgSource = fixturesFactory.buildMsgInstance(testerMeta);
-                msgCopy = testerMeta.decode(msgSource.encode());
+                msgCopy = TesterConstructor.decode(msgSource.encode());
                 msgDiffer = fixturesFactory.buildMsgInstance(testerMeta);
               });
 

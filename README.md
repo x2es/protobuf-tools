@@ -28,7 +28,7 @@ Testing environment is mocka+karma.
 
 ## Using
 
-Just include protobuf-wrapper.js instead original ProtoBuf.js and use it features from both libraries.
+Just include protobuf-wrapper.js instead original ProtoBuf.js and use features from both libraries.
 
     define(['protobuf-wrapper'], function(ProtoBuf) { ... });
 
@@ -77,7 +77,8 @@ Fields of each message-meta may be found like this:
     var MsgConstructor = MsgMeta.build(),
         msg1 = new MsgConstructor();
     
-    var msg2 = MsgMeta.decode(msg1.encode());
+    var msg2 = MsgConstructor.decode(msg1.encode());      
+    // NOTE: MsgMeta also have method .decode() but it cause problem with float/double types.
 
     assert.truly(msg1.equal(msg2));
 
