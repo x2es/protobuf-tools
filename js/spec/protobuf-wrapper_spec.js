@@ -24,7 +24,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
       msg.setInt32(34);
       msg.setUint32(43);
 
-      var msg2 = MsgMeta.decode(msg.encode());
+      var msg2 = MsgConstructor.decode(msg.encode());
       expect(msg.equal(msg2)).to.equal(true);
     });
 
@@ -36,7 +36,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
       msg.setInt64(34);
       msg.setUint64(43);
 
-      var msg2 = MsgMeta.decode(msg.encode());
+      var msg2 = MsgConstructor.decode(msg.encode());
       expect(msg.equal(msg2)).to.equal(true);
     });
 
