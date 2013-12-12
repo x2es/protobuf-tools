@@ -73,7 +73,7 @@ define(['ProtoBuf'], function(ProtoBuf) {
   // * getMessage(name): returns message with given name
   function attach_helpers() {
     // @return all available messages
-    ProtoBuf.Builder.prototype.getMessages = function() {
+    ProtoBuf.Builder.prototype.getMessagesMeta = function() {
       var messages = this.lookup().getChildren(ProtoBuf.Reflect.Message);
 
       // TODO:x2es: make like Array class
@@ -83,7 +83,7 @@ define(['ProtoBuf'], function(ProtoBuf) {
 
     // @param msgName: message name
     // @return message with given name
-    ProtoBuf.Builder.prototype.getMessage = function(msgName) {
+    ProtoBuf.Builder.prototype.getMessageMeta = function(msgName) {
       return (this.lookup().getChild(msgName));
     }
 

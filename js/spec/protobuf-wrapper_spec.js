@@ -17,7 +17,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode int32', function() {
-      var MsgMeta = proto.getMessage('MessageWithIntegers32');
+      var MsgMeta = proto.getMessageMeta('MessageWithIntegers32');
       var MsgConstructor = MsgMeta.build();
       var msg = new MsgConstructor();
 
@@ -29,7 +29,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode int64', function() {
-      var MsgMeta = proto.getMessage('MessageWithIntegers64');
+      var MsgMeta = proto.getMessageMeta('MessageWithIntegers64');
       var MsgConstructor = MsgMeta.build();
       var msg = new MsgConstructor();
 
@@ -44,7 +44,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     //                        seems method Message.prototype.encode should to use (new ByteBuffer().LE())
     //     SOLVED: .decode() should be called on Constructor instead of Meta
     it('should reencode floats (eq through wrapper.equal())', function() {
-      var MsgMeta = proto.getMessage('MessageWithFloats');
+      var MsgMeta = proto.getMessageMeta('MessageWithFloats');
       var MsgConstructor = MsgMeta.build();
       var msg = new MsgConstructor();
 
@@ -56,7 +56,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode float', function() {
-      var MsgMeta = proto.getMessage('FloatMessage');
+      var MsgMeta = proto.getMessageMeta('FloatMessage');
       var MsgConstructor = MsgMeta.build();
       var msg = new MsgConstructor();
 
@@ -71,7 +71,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode double', function() {
-      var MsgMeta = proto.getMessage('DoubleMessage');
+      var MsgMeta = proto.getMessageMeta('DoubleMessage');
       var MsgConstructor = MsgMeta.build();
       var msg = new MsgConstructor();
 
@@ -82,8 +82,8 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode nested float', function() {
-      var MsgMainMeta = proto.getMessage('NestedFloatMessage'),
-          MsgEmbedMeta = proto.getMessage('FloatMessage'),
+      var MsgMainMeta = proto.getMessageMeta('NestedFloatMessage'),
+          MsgEmbedMeta = proto.getMessageMeta('FloatMessage'),
           
           MsgMainConstr = MsgMainMeta.build(),
           MsgEmbedConstr = MsgEmbedMeta.build(),
@@ -103,8 +103,8 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
     });
 
     it('should reencode nested double', function() {
-      var MsgMainMeta = proto.getMessage('NestedDoubleMessage'),
-          MsgEmbedMeta = proto.getMessage('DoubleMessage'),
+      var MsgMainMeta = proto.getMessageMeta('NestedDoubleMessage'),
+          MsgEmbedMeta = proto.getMessageMeta('DoubleMessage'),
           
           MsgMainConstr = MsgMainMeta.build(),
           MsgEmbedConstr = MsgEmbedMeta.build(),
@@ -148,13 +148,11 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
       describe('helpers', function() {
         it('should list all available messages-meta', function() {
           var expected = proto.lookup().getChildren(ProtoBuf.Reflect.Message);
-          var availableMessages = proto.getMessages();
-
-          expect(proto.getMessages()).to.have.members(expected);
+          expect(proto.getMessagesMeta()).to.have.members(expected);
         });
 
         it('should find message-meta by name', function() {
-          expect(proto.getMessage('SampleOne')) .to.equal(proto.lookup().getChild('SampleOne'));
+          expect(proto.getMessageMeta('SampleOne')).to.equal(proto.lookup().getChild('SampleOne'));
         });
 
         it('should list available messages-meta having field with specified name', function() {
@@ -164,7 +162,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
             p.getChild('SharedFieldTwo')
           ];
 
-          expect(proto.getMessages().withField('sharedField')).to.have.members(expected);
+          expect(proto.getMessagesMeta().withField('sharedField')).to.have.members(expected);
         });
 
         it('should list fields-meta of message-meta', function() {
@@ -183,15 +181,15 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
       describe('tools', function() {
         describe('compare two messages instances', function() {
           it('should be false for defferent messages types', function() {
-            var sampleOne = new (proto.getMessage('SampleOne').build());
-            var sampleTwo = new (proto.getMessage('SampleTwo').build());
+            var sampleOne = new (proto.getMessageMeta('SampleOne').build());
+            var sampleTwo = new (proto.getMessageMeta('SampleTwo').build());
 
             expect(sampleOne.equal(sampleTwo)).to.equal(false);
           });
 
           describe('deep compare', function() {
             it('should be false on different primitive types', function() {
-              var MsgConstructor = proto.getMessage('SampleTwo').build(),
+              var MsgConstructor = proto.getMessageMeta('SampleTwo').build(),
                   msgOne = new MsgConstructor(),
                   msgTwo = new MsgConstructor();
 
@@ -202,7 +200,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
             });
 
             it('should be true on same primitive types', function() {
-              var MsgConstructor = proto.getMessage('SampleTwo').build(),
+              var MsgConstructor = proto.getMessageMeta('SampleTwo').build(),
                   msgOne = new MsgConstructor(),
                   msgTwo = new MsgConstructor();
 
@@ -213,8 +211,8 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
             });
             
             it('should be false on different message-types', function() {
-              var MsgParent = proto.getMessage('SimpleEmbedTest').build();
-              var MsgChild = proto.getMessage('SampleTwo').build();
+              var MsgParent = proto.getMessageMeta('SimpleEmbedTest').build();
+              var MsgChild = proto.getMessageMeta('SampleTwo').build();
               var msgOne = new MsgParent();
               var msgChild = new MsgChild();
 
@@ -227,7 +225,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
             });
 
             it('should be false when repeated length is different', function() {
-              var MsgConstructor = proto.getMessage('RepeatedFieldsTest').build();
+              var MsgConstructor = proto.getMessageMeta('RepeatedFieldsTest').build();
               var msgOne = new MsgConstructor();
               var msgTwo = new MsgConstructor();
 
@@ -240,7 +238,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
             });
 
             it('should be false on first different element in repeated for primitive types', function() {
-              var MsgConstructor = proto.getMessage('RepeatedFieldsTest').build();
+              var MsgConstructor = proto.getMessageMeta('RepeatedFieldsTest').build();
               var msgOne = new MsgConstructor();
               var msgTwo = new MsgConstructor();
 
@@ -251,8 +249,8 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
             });
 
             it('should be false on first different element in repeated for message-type', function() {
-              var MsgConstructor = proto.getMessage('RepeatedFieldsTest').build();
-              var MsgChildConstructor = proto.getMessage('SampleTwo').build();
+              var MsgConstructor = proto.getMessageMeta('RepeatedFieldsTest').build();
+              var MsgChildConstructor = proto.getMessageMeta('SampleTwo').build();
               var msgOne = new MsgConstructor();
               var msgChild = new MsgChildConstructor();
 
@@ -275,7 +273,7 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
 
               beforeEach(function() {
                 // it's complex message with 2-level nested sub-messages and several repeated fields
-                var testerMeta = proto.getMessage('CopyTesterMessage');
+                var testerMeta = proto.getMessageMeta('CopyTesterMessage');
                 var TesterConstructor = testerMeta.build();
 
                 // WARN:x2es: fixturesFactory has no test-coverage
