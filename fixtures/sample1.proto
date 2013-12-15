@@ -53,7 +53,7 @@ message SimpleInnerMessage {
     optional SampleEnum enum = 8;
     repeated SampleEnum repeatedEnum = 9;
     repeated int32 repeatedInt = 10;
-    //optional float flt = 11;
+    //optional float flt = 11;  // TODO:x2es: this is not solved issue with message.equal(anotherMsg); it may be reproduced 90% times (run karma tests)
 }
 
 message MessageWithIntegers32 {

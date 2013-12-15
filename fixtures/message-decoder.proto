@@ -1,0 +1,124 @@
+// This is fixtures for message-decoder_spec.js
+
+
+// this enum should contain unique values for all available payload messages types
+enum PayloadType {
+    MSG_FOO = 11;
+    MSG_BAR = 22;
+}    
+
+// this is not payload message, it will not be encoded/decoded directly, it will be used inside another messages
+message NotPayLoad {
+    optional string name = 1;
+    optional int32 value = 2;
+}
+
+// this is abstract message which will help with recognizing type of certain message
+message AbstractMessage {
+    optional PayloadType payloadType = 1;     // required/optional here and in other messages does not matter
+}
+
+// this is regular messages
+message FooMessage {
+    optional PayloadType payloadType = 1 [default = MSG_FOO];
+    optional int32 fooInt = 2;
+}
+
+message BarMessage {
+    optional PayloadType payloadType = 1 [default = MSG_BAR];
+    optional string barString = 2;
+    optional NotPayLoad innerMessage = 3;
+}
+
+// another abstract message for testing custom abstract message name
+message AbstractMsg {
+  optional CustomPayloads customPlType = 1;
+}
+
+enum CustomPayloads {
+    MSG_CUS_FOO = 121;
+    MSG_CUS_BAR = 323;
+}    
+
+message WrongAbstractEmpty {
+}
+
+message WrongAbstractMoreFields {
+    optional PayloadType payloadTypeForTooMoreFields = 1;
+    optional int32 excessField = 2;
+}
+
+message WrongAbstractNotEnum {
+    optional int32 notEnum = 1;
+}
+
+message WrongAbstractWithDefault {
+    optional PayloadType withDefault = 1 [default = MSG_FOO];
+}
+
+// group of messages with wrong payload-message: wrong payload position
+enum WrongPayloadPosEnum {
+    MSG_WRONG_PTPOS = 525;
+    MSG_CORRECT_PTPOS = 526;
+}    
+
+message AbstractForWrongPayloadPosition {
+    optional WrongPayloadPosEnum wrongPayloadTypePos = 1;
+}
+
+message PayloadMessageWithCorrectPayloadTypePos {
+    optional WrongPayloadPosEnum wrongPayloadTypePos = 1 [default = MSG_CORRECT_PTPOS];
+    optional int32 fld = 2;
+}
+
+message PayloadMessageWithWrongPayloadTypePos {
+    optional int32 shouldNotBeFirst = 1;
+    optional WrongPayloadPosEnum wrongPayloadTypePos = 2 [default = MSG_WRONG_PTPOS];
+}
+
+// group of messages with wrong payload-message: payload type without default
+
+enum WrongPayloadWODefault {
+    MSG_WRONG_PTWODEF = 437;
+    MSG_CORRECT_PTWODEF = 438;
+}    
+
+message AbstractForPayloadWODefault {
+    optional WrongPayloadWODefault wrongPayloadTypeWODefault = 1;
+}
+
+message PayloadMessageWithCorrectPayloadTypeDefault {
+    optional WrongPayloadWODefault wrongPayloadTypeWODefault = 1 [default = MSG_CORRECT_PTWODEF];
+    optional int32 fld = 2;
+}
+
+message PayloadMessageWithWrongPayloadTypeDefault {
+    optional WrongPayloadWODefault wrongPayloadTypeWODefault = 1;  // missed default
+    optional int32 fld = 2;
+}
+
+// group of messages with wrong payload-message: duplicated default value
+
+enum DupDefaultEnum {
+    MSG_DUPDEF_FOO = 988;
+    MSG_DUPDEF_BAR = 956;
+}
+
+message AbstractForDupDefault {
+    optional DupDefaultEnum dupDefaultPLType = 1;
+}
+
+message PlDupDefFoo {
+    optional DupDefaultEnum dupDefaultPLType = 1 [default = MSG_DUPDEF_FOO];
+    optional int32 fld = 2;
+}
+
+message PlDupDefBar {
+    optional DupDefaultEnum dupDefaultPLType = 1 [default = MSG_DUPDEF_BAR];
+    optional int32 fld = 2;
+}
+
+message PlDupDefWrong {
+    optional DupDefaultEnum dupDefaultPLType = 1 [default = MSG_DUPDEF_FOO];
+    optional int32 fld = 2;
+}

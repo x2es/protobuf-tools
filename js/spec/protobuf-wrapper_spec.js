@@ -5,7 +5,7 @@
  *            Check API first (proto.getMessage(), getMessages(), .withField(), ...).
  */
 
-define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf, fixturesFactory) {
+define(['chai', 'protobuf-wrapper', 'protobuf-wrapper.priv', 'fixtures-factory'], function(chai, ProtoBuf, _ProtoBuf, fixturesFactory) {
   var expect = chai.expect;
 
   describe('protobuf-wrapper', function() {
@@ -177,6 +177,51 @@ define(['chai', 'protobuf-wrapper', 'fixtures-factory'], function(chai, ProtoBuf
           });
 
           describe('deep compare', function() {
+
+            describe('NULL cases', function() {
+
+              // Is exist several different ways to compare:
+              // primitive, longjs, message, float, double
+              //
+              // but to reduce tests count (about 30 pices) following tests will check
+              // internal logic which handles null-case before using exact comparer
+
+
+              it('should false on NULL <=> message', function() {
+                // this will fail without special null-case handling
+                var cmpMessage =  _ProtoBuf.messages.getCompareMethod({ type: { name: 'message' } });
+                expect(cmpMessage(null, 'msg')).to.equal(false);
+              });
+
+              it('should false on NULL <=> anything', function() {
+                // 'anything' is not valid compare method, but if some of operands is null
+                // it is does not matter
+                var cmpAnything = _ProtoBuf.messages.getCompareMethod({ type: { name: 'anything' } });
+                expect(cmpAnything(null, 5)).to.equal(false);
+              });
+
+              it('should false on message <=> NULL', function() {
+                var cmpMessage =  _ProtoBuf.messages.getCompareMethod({ type: { name: 'message' } });
+                expect(cmpMessage('msg', null)).to.equal(false);
+              });
+
+              it('should false on anything <=> NULL', function() {
+                var cmpMessage =  _ProtoBuf.messages.getCompareMethod({ type: { name: 'anything' } });
+                expect(cmpMessage(6, null)).to.equal(false);
+              });
+
+              it('should true on NULL <=> NULL by message comparer', function() {
+                var cmpMessage =  _ProtoBuf.messages.getCompareMethod({ type: { name: 'message' } });
+                expect(cmpMessage(null, null)).to.equal(true);
+              });
+
+              it('should true on NULL <=> NULL by "anything" comparer', function() {
+                var cmpMessage =  _ProtoBuf.messages.getCompareMethod({ type: { name: 'anything' } });
+                expect(cmpMessage(null, null)).to.equal(true);
+              });
+
+            });
+
             it('should be false on different primitive types', function() {
               var MsgConstructor = proto.getMessageMeta('SampleTwo').build(),
                   msgOne = new MsgConstructor(),

@@ -38,8 +38,10 @@
         'ByteBuffer': 'node_modules/protobufjs/node_modules/bytebuffer/ByteBuffer',
         'Math/Long': 'node_modules/protobufjs/node_modules/bytebuffer/node_modules/long/Long',
 
-        'protobuf-wrapper': 'js/lib/protobuf-wrapper',
-        'fixtures-factory': 'js/lib/fixtures-factory'
+        'protobuf-wrapper':       'js/lib/protobuf-wrapper',
+        'protobuf-wrapper.priv':  'js/lib/protobuf-wrapper.priv',
+        'message-decoder':        'js/lib/message-decoder',
+        'fixtures-factory':       'js/lib/fixtures-factory'
       },
 
       // ask Require.js to load these files (all our tests)

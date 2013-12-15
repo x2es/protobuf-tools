@@ -1,60 +1,10 @@
 
-define(['ProtoBuf'], function(ProtoBuf) {
+define(['ProtoBuf', 'protobuf-wrapper.priv'], function(ProtoBuf, privContext) {
 
-  /* Helper definition */
-
-  var tools = {
-    messages: {
-      filterByField: function(fieldName) {
-        var res = [];
-        
-        var messages = this;
-        for (var i = 0; i < messages.length; i++) { var msg = messages[i];
-          var fields = msg.getChildren(ProtoBuf.Reflect.Message.Field);
-          for (var j = 0; j < fields.length; j++) { var fld = fields[j];
-            if (fld.name == fieldName) res.push(msg);
-          };
-        };
-
-        return (res);
-      },
-      compareMethods: {
-        'primitive': function(a, b) {
-          return (a === b);
-        },
-
-        'message': function(a, b) {
-          return (a.equal(b));
-        },
-
-        'longjs': function(a ,b) {
-          return (a.equals(b));
-        },
-
-        'float': function(a, b) {
-          // ISSUE:x2es [131206-1]: comparing should be performed with specified precision
-          //                        maximum precision for float and "1.52" example is 7 digits after dot
-          //                        for "43.2" example is 5 digits after dot
-          console.warn('protobuf-wrapper: float comparing performing with fixed precision = 5!');
-          var prec = 5;
-          return ((a.toFixed(prec) - b.toFixed(prec)) === 0);
-        },
-
-        'double': function(a, b) {
-          return ((a - b) === 0);
-        }
-      },
-      getCompareMethod: function(fld) {
-        var cmpMethod = this.compareMethods[fld.type.name];
-        if (cmpMethod != undefined) return (cmpMethod);
-
-        var longjsTypes = ['int64', 'uint64'];
-        if (longjsTypes.indexOf(fld.type.name) !== -1) return (this.compareMethods['longjs']);
-
-        return (this.compareMethods['primitive']);
-      }
-    }
-  }
+  // @see protobuf-wrapper.priv.js
+  // it is private context extracted to sandalone AMD module
+  // for TDD purposes
+  var tools = privContext;
 
   /* Changes definition */
 

@@ -4,7 +4,7 @@ ProtoBuf Wrapper User Stories
 
 ## ProtoBuf Wrapper Features
 
-Implementation of following features will simplify making hi-level logic 
+Implementation of following features will simplify making hi-level logic (all implemented)
 
     In order to easy recognizing of message type    I want to get link on meta-class from any message instance and it's class (constuctor)
     In order to easy listing available messages			I want to get list of all available messages
